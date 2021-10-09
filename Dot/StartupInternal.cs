@@ -16,7 +16,7 @@ namespace Dot
         private const string gitHubUsersApi = "https://api.github.com/users";
 
         /// <summary>
-        /// Seed the database with data from the GitHub API if there are no users in the database already
+        /// Seeds the database with data from the GitHub API if there are no users in the database already
         /// </summary>
         /// <returns></returns>
         private static async Task InitializeAppDataAsync()
