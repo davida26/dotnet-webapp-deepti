@@ -22,4 +22,4 @@ jobs:
     - name: Build Solution
       run: dotnet build Dot/Dot.sln --no-restore
     - name: Run Automated Tests
-      run: dotnet test Dot/Dot.Tests.csproj --no-build --verbosity normal
+      run: dotnet test Dot.Tests/Dot.Tests.csproj --no-build --verbosity normal
