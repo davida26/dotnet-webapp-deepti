@@ -1,0 +1,12 @@
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\bin\Release\netcoreapp3.1\Dot.Services.deps.json
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\bin\Release\netcoreapp3.1\Dot.Services.dll
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\bin\Release\netcoreapp3.1\Dot.Services.pdb
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\bin\Release\netcoreapp3.1\Dot.Data.dll
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\bin\Release\netcoreapp3.1\Dot.Data.pdb
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\obj\Release\netcoreapp3.1\Dot.Services.csproj.AssemblyReference.cache
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\obj\Release\netcoreapp3.1\Dot.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\obj\Release\netcoreapp3.1\Dot.Services.AssemblyInfoInputs.cache
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\obj\Release\netcoreapp3.1\Dot.Services.AssemblyInfo.cs
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\obj\Release\netcoreapp3.1\Dot.Services.csproj.CoreCompileInputs.cache
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\obj\Release\netcoreapp3.1\Dot.Services.dll
+C:\Users\priya\source\repos\Priu\Assignment\Dot.Services\obj\Release\netcoreapp3.1\Dot.Services.pdb
