@@ -1,3 +1,5 @@
+[![.NET](https://github.com/Prigan/dotnet-webapp-deepti/actions/workflows/Basic%20CI%20and%20CD.yml/badge.svg)](https://github.com/Prigan/dotnet-webapp-deepti/actions/workflows/Basic%20CI%20and%20CD.yml)
+
 # Dot - A Developer Search System
 In this coding challenge you will build a simple webapp called "Dot" that uses the Github REST API to load user data.
 The challenge is designed to test your thinking, process, and ability to put together an application.
