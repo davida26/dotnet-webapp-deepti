@@ -1,0 +1,9 @@
+﻿@{ 
+    Dot.Services.Models.UserVm user = Model;
+}
+
+@using (Html.BeginForm("AddUser", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <input type="hidden" value="@user" name="user" id="user" />
+    <input type="submit" value="Add" class="btn btn-outline-dark" />
+}

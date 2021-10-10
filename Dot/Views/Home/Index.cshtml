@@ -1,21 +1,39 @@
 ﻿@{
-    ViewData["Title"] = "Home";
-    List<Dot.Services.Models.UserVm> users = Model;
+    ViewData["Title"] = "Home Page";
+    Dot.Services.Models.UserListVm users = Model;
 }
 
 <div class="col-lg-12 col-md-12 col-sm-6">
-    @if (users != null)
+    @if (users != null && users.Users.Any())
     {
-        foreach (var user in users)
+        foreach (var user in users.Users)
         {
-            <div class="">
-                <div class="card m-2 p-2 float-left">
-                    <dl>
-                        <dd><img src="@user.AvatarUrl" alt="User image" height="200" width="185" /></dd>
-                        <dd><a href="@user.Url">@user.Login</a></dd>
-                        <dd>@user.Type</dd>
-                    </dl>
-                </div>
+            <div class="card m-2 p-2 float-left">
+                <dl>
+                    <dd><a href="@user.Url"><img src="@user.AvatarUrl" alt="User image" height="200" width="200" /></a></dd>
+                    <dd><a href="@user.Url">@user.Login</a></dd>
+                    <dd>
+                        <ul class="stats list-inline">
+                            <partial name="_FollowersPartial" model="@user.Followers"></partial>
+                            <li title="Type">@user.Type</li>
+                            @if (!Model.IsSearchResult)
+                            {
+                                <li>
+                                    <partial name="_FavoritePartial" model="@user"></partial>
+                                </li>
+                                <li class="hidden del">
+                                    <a href="@Url.Action("Delete", "Home",  new {id = user.Id})" class="text-danger"><i class="fa fa-trash-alt"></i></a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <partial name="_AddUserPartial" model="@user"></partial>
+                                </li>
+                            }
+                        </ul>
+                    </dd>
+                </dl>
             </div>
         }
     }

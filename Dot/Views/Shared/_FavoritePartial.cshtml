@@ -1,0 +1,31 @@
+﻿@model Dot.Services.Models.UserVm
+
+@{ 
+    var user = Model;
+    var userId = user.Id;
+}
+
+@if (Model.IsFavorite)
+{
+    <i class="fa fa-star" onclick="ToggleFavorite(@userId);"></i>
+}
+else
+{
+    <i class="fa fa-star opacity25" onclick="ToggleFavorite(@userId);"></i>
+}
+
+<script type="text/javascript">
+
+    function ToggleFavorite(userId) {
+        $.ajax({
+            method: 'GET',
+            url: "/Home/ToggleFavorite?id=" + userId,
+            success: function () {
+                window.location.reload();
+            },
+            error: function () {
+                alert("Sorry! An error occourred when attempting to set favorite for this user");
+            }
+        })
+    }
+</script>

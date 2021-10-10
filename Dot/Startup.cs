@@ -1,6 +1,5 @@
 using Dot.Services;
 using Dot.Services.Mappings;
-using Dot.Models;
 using Dot.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,11 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using DOt.Helpers;
 
 namespace Dot
 {
     public partial class Startup
     {
+        private const string gitHubUsersApi = "https://api.github.com/users";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -38,13 +40,16 @@ namespace Dot
 
             services.AddDbContext<DotContext>(options =>
             {
-                options.UseInMemoryDatabase(databaseName: "DotDatabase");
-            });
+                options.UseInMemoryDatabase(databaseName : "DotDatabase");
+            }, ServiceLifetime.Scoped);
 
-            services.AddSingleton<ILogger>(svc => svc.GetRequiredService<ILogger<DotService>>());
+            services.AddScoped<ILogger>(svc => svc.GetRequiredService<ILogger<DotService>>());
 
-            _ = InitializeAppDataAsync();
+            var isLive = Configuration.GetValue(typeof(bool), "IsLive");
 
+            var sampleUsers = DemoData.GetAllSampleUsers();
+
+            _ = InitializeAppDataAsync(Configuration.GetValue(typeof(string), "GitApiUsersUrl").ToString(), false, (bool)isLive, sampleUsers).Result;
 
         }
 

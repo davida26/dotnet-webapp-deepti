@@ -69,3 +69,56 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.stats li {
+    width: auto;
+    min-width: 20px;
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+    float: left;
+}
+
+.stats li>span{
+    padding-left: 10px;
+}
+
+.stats li > a {
+    min-width: 40px;
+}
+
+.opacity25{
+    opacity : 0.25;
+}
+
+.hidden{
+    display: none !important;
+}
+
+.highlight{
+    background-color : lightcyan;
+}
+
+.tooltip > hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid lightcyan;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.readableLinks{
+    color: #e5e5e5;
+    text-decoration:underline;
+}
+
+.tooltip-inner {
+    width: 150px !important;
+    max-height: 150px !important;
+    overflow-y: scroll
+}
+
+.searchInput{
+    width : 800px;
+}

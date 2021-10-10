@@ -11,8 +11,18 @@ namespace Dot.Services.Mappings
     {
         public MappingProfile()
         {
-            CreateMap<User, UserVm>().ReverseMap();
+            CreateMap<User, UserVm>()
+                .ForMember(dest =>
+                                    dest.AvatarUrl,
+                                    opt => opt.MapFrom(src => src.Avatar_Url))
+                .ForMember(dest =>
+                                    dest.Followers,
+                                    opt => opt.MapFrom(src => src.Followers))
+                .ReverseMap();
 
+            CreateMap<Follower, FollowerVm>().ReverseMap();
+
+            CreateMap<Favorite, FavoriteVm>().ReverseMap();
         }
     }
 }

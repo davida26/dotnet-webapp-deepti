@@ -1,0 +1,16 @@
+﻿@{
+
+    var query = string.Empty;
+}
+
+@using (Html.BeginForm("Search", "Home", new { query = query }, FormMethod.Get))
+{
+    <ul class="list-inline stats">
+        <li>
+            @Html.TextBoxFor(m => query, new { placeholder = "search username", data_message = "Required", @class = "form-control searchInput" })
+        </li>
+        <li>
+            <input type="submit" value="Search" class="btn btn-dark" />
+        </li>
+    </ul>
+}

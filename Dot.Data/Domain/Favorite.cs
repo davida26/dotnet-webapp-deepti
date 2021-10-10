@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace Dot.Data.Domain
 {
-    public class Favorite
+    public class Favorite : BaseEntity
     {
-        public int Id { get; set; }
-
         public int UserId { get; set; }
     }
 }

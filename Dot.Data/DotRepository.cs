@@ -18,6 +18,7 @@ namespace Dot.Data
         bool Update(User user);
 
         bool Delete(int id);
+        List<User> GetFavorites();
     }
 
     public class DotRepository : IDotRepository
@@ -39,7 +40,7 @@ namespace Dot.Data
         {
             var entityState = _context.Add(user);
             _uoW.Save();
-            return entityState.State == EntityState.Added;
+            return true;
         }
 
         /// <summary>
@@ -52,10 +53,9 @@ namespace Dot.Data
             var targetUser = _context.User.SingleOrDefault(u => u.Id == id);
             if(targetUser != null)
             {
-                _context.Favorite.RemoveRange(targetUser.Favorites);
                 var entityState = _context.User.Remove(targetUser);
                 _uoW.Save();
-                return entityState.State == EntityState.Deleted;
+                return true;
             }
             return false;
         }
@@ -67,7 +67,7 @@ namespace Dot.Data
         /// <returns>A user whose Id matches the parameter if found, null otherwise</returns>
         public User Get(int id)
         {
-            return _context.User.Include(u => u.Favorites).SingleOrDefault(u => u.Id == id);
+            return _context.User.Include(u => u.Followers).SingleOrDefault(u => u.Id == id);
         }
 
         /// <summary>
@@ -76,7 +76,12 @@ namespace Dot.Data
         /// <returns>A list of users</returns>
         public List<User> GetAll()
         {
-            return _context.User.Include(u => u.Favorites).ToList();
+            return _context.User.Include(u => u.Followers).Include(u => u.Followers).ToList();
+        }
+
+        public List<User> GetFavorites()
+        {
+            return _context.User.Where(u => u.IsFavorite).ToList();
         }
 
         /// <summary>
@@ -89,14 +94,16 @@ namespace Dot.Data
             var targetUser = _context.User.SingleOrDefault(u => u.Id == user.Id);
             if(targetUser != null)
             {
+                targetUser.Followers_Url = user.Followers_Url;
                 targetUser.Type = user.Type;
                 targetUser.Url = user.Url;
-                targetUser.AvatarUrl = user.AvatarUrl;
+                targetUser.Avatar_Url = user.Avatar_Url;
                 targetUser.Login = user.Login;
+                targetUser.IsFavorite = user.IsFavorite;
 
                 var entityState = _context.Update(targetUser);
                 _uoW.Save();
-                return entityState.State == EntityState.Modified;
+                return true;
             }
 
             return false;

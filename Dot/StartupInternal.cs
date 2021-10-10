@@ -1,66 +1,103 @@
 ﻿using Dot.Data;
 using Dot.Data;
 using Dot.Data.Domain;
+using DOt.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Dot
 {
     public partial class Startup
     {
-        private const string gitHubUsersApi = "https://api.github.com/users";
 
         /// <summary>
-        /// Seeds the database with data from the GitHub API if there are no users in the database already
+        /// Seed the database with data from the GitHub API if there are no users in the database already
         /// </summary>
         /// <returns></returns>
-        private static async Task InitializeAppDataAsync()
+        private static async Task<List<User>> InitializeAppDataAsync(string gitHubUrl, bool returnFollowers, bool isLive, string sampleUsers)
         {
             try
             {
-                using (var client = new HttpClient())
+                var result = string.Empty;
+                if (!isLive)
                 {
-                    client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                    client.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
+                    result = DemoData.GetRandomUsers(sampleUsers);
+                }
+                else
+                {
+                    result = await Utilities.MakeGitHubApiRequestAsync(gitHubUrl);
+                }
 
-                    var result = await client.GetStringAsync(gitHubUsersApi);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    var parsedUsers = JsonConvert.DeserializeObject<List<User>>(result);
 
-                    if (!string.IsNullOrEmpty(result))
+                    if (parsedUsers != null)
                     {
-                        var parsedUsers = JsonConvert.DeserializeObject<List<User>>(result);
-                        if (parsedUsers != null)
+                        if (returnFollowers)
                         {
-                            var options = new DbContextOptionsBuilder<DotContext>().UseInMemoryDatabase(databaseName: "DotDatabase").Options;
-                            using (var db = new DotContext(options))
+                            return parsedUsers;
+                        }
+                        else
+                        {
+                            foreach (var user in parsedUsers)
                             {
-                                if (await db.User.AnyAsync())
+                                if (!string.IsNullOrEmpty(user.Followers_Url))
                                 {
-                                    return;
-                                }
-                                else
-                                {
-                                    var uow = new DotUoW(db);
-
-                                    foreach (var user in parsedUsers)
-                                    {
-                                        db.User.Add(user);
-                                    }
-
-                                    uow.Save();
+                                    // fetch login data for all followers
+                                    var followers = InitializeAppDataAsync(user.Followers_Url, true, isLive, sampleUsers).Result;
+                                    user.Followers.AddRange(followers.Select(f => new Follower { Login = f.Login }));
                                 }
                             }
+
+                            await PersistData(parsedUsers);
                         }
                     }
                 }
-            }
-            catch (Exception)
-            {
 
+            }
+            catch (Exception ex)
+            {
+                var err = ex;
+            }
+
+            return await Task.FromResult(new List<User>());
+        }
+
+        /// <summary>
+        /// Stores all data fetched from the remote api or file
+        /// </summary>
+        /// <param name="parsedUsers"></param>
+        /// <returns>none</returns>
+        private static async Task PersistData(List<User> parsedUsers)
+        {
+            var options = new DbContextOptionsBuilder<DotContext>()
+                .UseInMemoryDatabase(databaseName: "DotDatabase")
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                .Options;
+
+            using (var db = new DotContext(options))
+            {
+                if (await db.User.AnyAsync())
+                {
+                    return;
+                }
+                else
+                {
+                    var uow = new DotUoW(db);
+
+                    foreach (var user in parsedUsers)
+                    {
+                        db.User.Add(user);
+                        uow.Save();
+                    }
+                }
             }
         }
     }

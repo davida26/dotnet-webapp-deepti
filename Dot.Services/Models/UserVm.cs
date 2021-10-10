@@ -16,6 +16,8 @@ namespace Dot.Services.Models
 
         public string Type { get; set; }
 
-        public List<FavoriteVm> Favorites { get; set; }
+        public List<FollowerVm> Followers { get; set; }
+
+        public bool IsFavorite { get; set; }
     }
 }
